@@ -10,8 +10,20 @@ input.addEventListener("keydown", (e) => {
 function search(query) {
   results.innerHTML = `<p>Searching for "<strong>${query}</strong>"…</p>`;
 
-  // Placeholder for backend API
-  // fetch(`https://your-backend/search?q=${encodeURIComponent(query)}`)
+  function search(query) {
+  results.innerHTML = "Searching…";
+
+  fetch(`http://127.0.0.1:8000/search?q=${encodeURIComponent(query)}`)
+    .then(res => res.json())
+    .then(data => {
+      results.innerHTML = data.map(r => `
+        <div>
+          <a href="${r.url}" target="_blank">${r.title}</a>
+          <small>(${r.tag})</small>
+        </div>
+      `).join("");
+    });
+}
 }
 
 if ("serviceWorker" in navigator) {
