@@ -15,14 +15,20 @@
 
   <main class="glass-container">
     <h1>Glass View</h1>
-    <p class="tagline">Search Game Dev. See Scratch clearly.</p>
+    <p class="tagline">Scratch-first Game Development Search Engine</p>
 
     <input
       id="searchInput"
       type="search"
-      placeholder="Search Scratch projects, tutorials, engines…"
+      placeholder="Search Scratch projects, tutorials, enginesâ€¦"
       autocomplete="off"
     />
+
+    <div class="filters">
+      <button id="filter-all" class="active">All</button>
+      <button id="filter-scratch">Scratch</button>
+      <button id="filter-game-dev">Game Dev</button>
+    </div>
 
     <div id="results"></div>
   </main>
