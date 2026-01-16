@@ -1,56 +1,71 @@
-const input = document.getElementById("searchInput");
-const results = document.getElementById("results");
-const filterAll = document.getElementById("filter-all");
-const filterScratch = document.getElementById("filter-scratch");
-const filterGameDev = document.getElementById("filter-game-dev");
+const searchInput = document.getElementById('search-input');
+const searchBtn = document.getElementById('search-btn');
+const resultsDiv = document.getElementById('results');
+const filterBtns = document.querySelectorAll('.filter-btn');
 
-let currentFilter = "all";
-let lastResults = [];
+let currentFilter = 'all';
 
-filterAll.addEventListener("click", () => setFilter("all"));
-filterScratch.addEventListener("click", () => setFilter("scratch"));
-filterGameDev.addEventListener("click", () => setFilter("game_dev"));
+// Mock data
+const mockResults = [
+  { title: 'Scratch Platformer Tutorial', url: 'https://scratch.mit.edu/projects/123', tag: 'scratch' },
+  { title: 'Collision Detection in Scratch', url: 'https://scratch.mit.edu/projects/456', tag: 'scratch' },
+  { title: 'Unity Game Development Guide', url: 'https://learn.unity.com/', tag: 'gamedev' },
+  { title: 'Godot Engine Basics', url: 'https://docs.godotengine.org/', tag: 'gamedev' },
+  { title: 'General Web Search', url: 'https://www.google.com', tag: 'general' }
+];
 
-function setFilter(filter) {
-  currentFilter = filter;
-  document.querySelectorAll(".filters button").forEach(btn => btn.classList.remove("active"));
-  document.getElementById(`filter-${filter}`).classList.add("active");
-  displayResults(lastResults);
-}
-
-input.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    search(input.value);
-  }
+searchBtn.addEventListener('click', performSearch);
+searchInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') performSearch();
 });
 
-function search(query) {
-  results.innerHTML = `<p>Searching for "<strong>${query}</strong>"…</p>`;
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    performSearch();
+  });
+});
 
-  fetch(`http://127.0.0.1:8000/search?q=${encodeURIComponent(query)}`)
-    .then(res => res.json())
-    .then(data => {
-      lastResults = data;
-      displayResults(data);
-    })
-    .catch(err => {
-      results.innerHTML = `<p>Error: ${err.message}</p>`;
-    });
+function performSearch() {
+  const query = searchInput.value.trim();
+  if (!query) return;
+
+  resultsDiv.innerHTML = '<p>Searching...</p>';
+
+  // Simulate API call delay
+  setTimeout(() => {
+    let results = mockResults.filter(item => 
+      item.title.toLowerCase().includes(query.toLowerCase()) ||
+      item.tag.toLowerCase().includes(query.toLowerCase())
+    );
+
+    if (currentFilter !== 'all') {
+      results = results.filter(item => item.tag === currentFilter);
+    }
+
+    displayResults(results);
+  }, 500);
 }
 
-function displayResults(data) {
-  let filtered = data;
-  if (currentFilter !== "all") {
-    filtered = data.filter(r => r.tag === currentFilter);
+function displayResults(results) {
+  if (results.length === 0) {
+    resultsDiv.innerHTML = '<p>No results found.</p>';
+    return;
   }
-  results.innerHTML = filtered.map(r => `
-    <div>
-      <a href="${r.url}" target="_blank">${r.title}</a>
-      <small>(${r.tag})</small>
+
+  resultsDiv.innerHTML = results.map(result => `
+    <div class="result-item">
+      <a href="${result.url}" target="_blank">${result.title}</a>
+      <div class="tag">${result.tag}</div>
     </div>
-  `).join("");
+  `).join('');
 }
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js");
+// Register service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js')
+    .then(registration => console.log('SW registered'))
+    .catch(error => console.log('SW registration failed'));
 }

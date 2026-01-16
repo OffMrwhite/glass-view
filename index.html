@@ -1,37 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Glass View</title>
-
-  <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="styles.css" />
-  <meta name="theme-color" content="#0f1115" />
-
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ffffff">
 </head>
 <body>
-
-  <main class="glass-container">
-    <h1>Glass View</h1>
-    <p class="tagline">Scratch-first Game Development Search Engine</p>
-
-    <input
-      id="searchInput"
-      type="search"
-      placeholder="Search Scratch projects, tutorials, enginesâ€¦"
-      autocomplete="off"
-    />
-
-    <div class="filters">
-      <button id="filter-all" class="active">All</button>
-      <button id="filter-scratch">Scratch</button>
-      <button id="filter-game-dev">Game Dev</button>
-    </div>
-
-    <div id="results"></div>
-  </main>
+  <div class="container">
+    <header>
+      <h1>Glass View</h1>
+      <p>Crystal-clear search for game development</p>
+    </header>
+    
+    <main>
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="Search for Scratch projects, tutorials, engines...">
+        <button id="search-btn">🔍</button>
+      </div>
+      
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="scratch">Scratch</button>
+        <button class="filter-btn" data-filter="gamedev">Game Dev</button>
+      </div>
+      
+      <div id="results" class="results"></div>
+    </main>
+  </div>
 
   <script src="app.js"></script>
 </body>
