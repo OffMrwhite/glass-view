@@ -10,9 +10,6 @@ input.addEventListener("keydown", (e) => {
 function search(query) {
   results.innerHTML = `<p>Searching for "<strong>${query}</strong>"…</p>`;
 
-  function search(query) {
-  results.innerHTML = "Searching…";
-
   fetch(`http://127.0.0.1:8000/search?q=${encodeURIComponent(query)}`)
     .then(res => res.json())
     .then(data => {
@@ -22,8 +19,10 @@ function search(query) {
           <small>(${r.tag})</small>
         </div>
       `).join("");
+    })
+    .catch(err => {
+      results.innerHTML = `<p>Error: ${err.message}</p>`;
     });
-}
 }
 
 if ("serviceWorker" in navigator) {
